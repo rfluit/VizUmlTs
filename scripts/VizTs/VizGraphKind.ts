@@ -1,6 +1,6 @@
 module VizTs {
-    export class VizGraphKind {
+	export class VizGraphKind {
 		static graph: string = 'graph';
-        static digraph: string = 'digraph';
-    }
+		static digraph: string = 'digraph';
+	}
 }

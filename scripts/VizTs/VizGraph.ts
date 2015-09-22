@@ -8,54 +8,53 @@
 /// <reference path="VizHelpers.ts"/>
 
 module VizTs {
-    export class VizGraph {
-        graphKind: VizGraphKind;
-        name: string;
-        
-        nodeSettings: VizNodeSettings;
-        
-        statements: VizStatement[];
+	export class VizGraph {
+		graphKind: VizGraphKind;
+		name: string;
 
-        private nextEdgeNumber = 0;
+		nodeSettings: VizNodeSettings;
 
-        constructor(graphKind: VizGraphKind, name: string) {
-            this.name = name;
-            this.graphKind = graphKind;
-            this.nodeSettings = new VizNodeSettings();
+		statements: VizStatement[];
 
-            this.statements = [];
-        }
+		private nextEdgeNumber = 0;
 
-        add(statement: VizStatement): void {
-            if (statement)
-                this.statements.push(statement);
-        }
+		constructor(graphKind: VizGraphKind, name: string) {
+			this.name = name;
+			this.graphKind = graphKind;
+			this.nodeSettings = new VizNodeSettings();
 
-        node(name: string, label: string = null): VizNode {
-            var node = new VizNode(name);
-            if (label)
-                node.label(label);
-            this.add(node);
-            return node;
-        }
+			this.statements = [];
+		}
 
-        edge(from: VizNode, to: VizNode, label: string = null, arrowHead: string = null, arrowTail: string = null, style: string = null, fontsize: number = null, headLabel: string = null, tailLabel: string = null): VizEdge {
-            var edge = new VizEdge('__edge' + this.nextEdgeNumber++, from, to, label, arrowHead, arrowTail, style, fontsize, headLabel, tailLabel);
-            this.add(edge);
-            return edge;
-        }
+		add(statement: VizStatement): void {
+			if (statement)
+				this.statements.push(statement);
+		}
 
-        toCode(): string {
-            var buffer = [];
-            buffer.push(this.graphKind, ' ', this.name, ' {', VizHelpers.newLine);
-            buffer.push(this.nodeSettings.toCode());
-            
-            // TODO: implement exposed cluster/subgraph feature
-            this.statements.forEach(s => buffer.push(s.toCode()));
+		node(name: string, label: string = null): VizNode {
+			var node = new VizNode(name);
+			if (label)
+				node.label(label);
+			this.add(node);
+			return node;
+		}
 
-            buffer.push('}');
-            return buffer.join('');
-        }
-    }
+		edge(from: VizNode, to: VizNode, label: string = null, arrowHead: string = null, arrowTail: string = null, style: string = null, fontsize: number = null, headLabel: string = null, tailLabel: string = null): VizEdge {
+			var edge = new VizEdge('__edge' + this.nextEdgeNumber++, from, to, label, arrowHead, arrowTail, style, fontsize, headLabel, tailLabel);
+			this.add(edge);
+			return edge;
+		}
+
+		toCode(): string {
+			var buffer = [];
+			buffer.push(this.graphKind, ' ', this.name, ' {', VizHelpers.newLine);
+			buffer.push(this.nodeSettings.toCode());
+
+			// TODO: implement exposed cluster/subgraph feature
+			this.statements.forEach(s => buffer.push(s.toCode()));
+
+			buffer.push('}');
+			return buffer.join('');
+		}
+	}
 }
-

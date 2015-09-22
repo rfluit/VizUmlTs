@@ -1,28 +1,28 @@
 ﻿module VizUml {
-    export class VizUmlGraph {
-        private name: string;
-        private types: VizUmlType[];
-        private relations: VizUmlRelation[];
-        private nextNodeNumber: number = 0;
+	export class VizUmlGraph {
+		private name: string;
+		private types: VizUmlType[];
+		private relations: VizUmlRelation[];
+		private nextNodeNumber: number = 0;
 
-        constructor(name: string) {
-            this.name = name;
-            this.types = [];
-            this.relations = [];
-        }
+		constructor(name: string) {
+			this.name = name;
+			this.types = [];
+			this.relations = [];
+		}
 
-        addClass(name: string, tag: any = null): VizUmlType {
-            var type = new VizUmlType('__node' + this.nextNodeNumber++, name, tag);
-            this.types.push(type);
-            return type;
-        }
+		addClass(name: string, tag: any = null): VizUmlType {
+			var type = new VizUmlType('__node' + this.nextNodeNumber++, name, tag);
+			this.types.push(type);
+			return type;
+		}
 
 		addInterface(name: string, tag: any = null): VizUmlType {
 			// TODO: different rendering
-            var type = new VizUmlType('__node' + this.nextNodeNumber++, name, tag);
-            this.types.push(type);
-            return type;
-        }
+			var type = new VizUmlType('__node' + this.nextNodeNumber++, name, tag);
+			this.types.push(type);
+			return type;
+		}
 
 		// generalization
 		isA(child: VizUmlType, parent: VizUmlType): VizUmlRelation {
@@ -47,41 +47,41 @@
 			return relation;
 		}
 
-        private addRelation(from: VizUmlType, to: VizUmlType, label: string = null, arrowHead: string = null, arrowTail: string = null, style: string = null, fontsize: number = null): VizUmlRelation {
-            var relation = new VizUmlRelation(from, to, label, arrowHead, arrowTail, style, fontsize);
-            this.relations.push(relation);
-            return relation;
-        }
+		private addRelation(from: VizUmlType, to: VizUmlType, label: string = null, arrowHead: string = null, arrowTail: string = null, style: string = null, fontsize: number = null): VizUmlRelation {
+			var relation = new VizUmlRelation(from, to, label, arrowHead, arrowTail, style, fontsize);
+			this.relations.push(relation);
+			return relation;
+		}
 
-        toCode(): string {
-            var graph = new VizTs.VizGraph(VizTs.VizGraphKind.digraph, this.name);
+		toCode(): string {
+			var graph = new VizTs.VizGraph(VizTs.VizGraphKind.digraph, this.name);
 			graph.nodeSettings.shape("box");
 			//graph.nodeSettings.rankdir("BT");
 
-            var nodes = new Array<VizTs.VizNode>();
-            for (var key in this.types) {
-                var type = this.types[key];
-                nodes[type.name] = type.addToGraph(graph);
-            }
+			var nodes = new Array<VizTs.VizNode>();
+			for (var key in this.types) {
+				var type = this.types[key];
+				nodes[type.name] = type.addToGraph(graph);
+			}
 
-            for (var key in this.relations) {
-                var relation = this.relations[key];
-                relation.addToGraph(graph, nodes);
-            }
+			for (var key in this.relations) {
+				var relation = this.relations[key];
+				relation.addToGraph(graph, nodes);
+			}
 
-            return graph.toCode();
-        }
-    }
-    
-    export class VizUmlType {
-        name: string;
-        label: string;
-        tag: any; // Free usage object storage for association
+			return graph.toCode();
+		}
+	}
 
-        style: string;
-        
-        // TODO: implement methods and properties
-        /*
+	export class VizUmlType {
+		name: string;
+		label: string;
+		tag: any; // Free usage object storage for association
+
+		style: string;
+
+		// TODO: implement methods and properties
+		/*
         methods: VizUmlMethod[];
         properties: VizUmlProperty[];
         export class VizUmlMethod {
@@ -98,18 +98,18 @@
             static pub: number = 1;
         }*/
 
-        
-        constructor(name: string, label: string, tag: any) {
-            this.name = name;
-            this.label = label;
-            this.tag = tag;
-        }
 
-        addToGraph(graph: VizTs.VizGraph): VizTs.VizNode {
-            var node = graph.node(this.name, this.label);
-            if (this.style)
-                node.attr('style', this.style);
-            return node;
-        }
-    }
+		constructor(name: string, label: string, tag: any) {
+			this.name = name;
+			this.label = label;
+			this.tag = tag;
+		}
+
+		addToGraph(graph: VizTs.VizGraph): VizTs.VizNode {
+			var node = graph.node(this.name, this.label);
+			if (this.style)
+				node.attr('style', this.style);
+			return node;
+		}
+	}
 }
